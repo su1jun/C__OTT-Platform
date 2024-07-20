@@ -1,5 +1,6 @@
 import React from 'react';
 
+// data type interface for ts
 interface InputProps {
   id: string;
   onChange: any;
@@ -8,6 +9,7 @@ interface InputProps {
   type?: string;
 }
 
+// input line in loginform
 const Input: React.FC<InputProps> = ({ id, onChange, value, label, type }) => {
   return (
     <div className="relative">

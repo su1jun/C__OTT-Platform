@@ -3,6 +3,7 @@ import Credentials from 'next-auth/providers/credentials';
 import { compare } from 'bcrypt';
 import prismadb from '@/libs/prismadb';
 
+// vaild account 
 export default NextAuth({
     providers: [
       Credentials({
@@ -19,19 +20,20 @@ export default NextAuth({
           }
         },
         async authorize(credentials) {
-          if (!credentials?.email || !credentials?.password) {
+          if (!credentials?.email || !credentials?.password) { // need email, pw
             throw new Error('Email and password required');
           }
   
-          const user = await prismadb.user.findUnique({ where: {
+          const user = await prismadb.user.findUnique({ where: { // prisma ~ dbOrm
             email: credentials.email
           }});
   
           if (!user || !user.hashedPassword) {
             throw new Error('Email does not exist');
           }
-  
-          const isCorrectPassword = await compare(
+          
+          // check pw
+          const isCorrectPassword = await compare( 
             credentials.password,
             user.hashedPassword
           );
@@ -45,9 +47,10 @@ export default NextAuth({
       })
     ],
     pages: {
-      signIn: '/auth'
+      signIn: '/auth' // login page
     },
     debug: process.env.NODE_ENV === 'development',
+    // connection config setting
     session: { strategy: 'jwt' },
     jwt: {
         secret: process.env.NEXTAUTH_JWT_SECRET,
