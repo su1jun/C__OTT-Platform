@@ -1,9 +1,7 @@
-"use client"; // CSR
-
 import axios from 'axios';
 import { useCallback, useState } from 'react';
 import { signIn } from 'next-auth/react';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import Input from '@/components/input';
 import { FcGoogle } from 'react-icons/fc';
@@ -11,6 +9,8 @@ import { FaGithub } from 'react-icons/fa';
 
 const Auth = () => {
   // manage hook  
+  const router = useRouter();
+
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
@@ -24,20 +24,18 @@ const Auth = () => {
 
   const login = useCallback(async () => {
     try {
-      const result = await signIn('credentials', {
+      await signIn('credentials', {
         email,
         password,
         redirect: false,
         callbackUrl: '/'
       });
 
-      if (result?.ok) {
-        window.location.href = '/';
-      }
+      router.push('/profiles');
     } catch (error) {
       console.log(error);
     }
-  }, [email, password]);
+  }, [email, password, router]);
 
   const register = useCallback(async () => {
     try {
