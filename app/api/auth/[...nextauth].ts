@@ -1,11 +1,24 @@
 import NextAuth, { AuthOptions } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { compare } from 'bcrypt';
+
+import GithubProvider from 'next-auth/providers/github';
+import GoogleProvider from 'next-auth/providers/google';
+
 import prismadb from '@/libs/prismadb';
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
 
 // vaild account 
 export default NextAuth({
     providers: [
+      GithubProvider({
+        clientId: process.env.GITHUB_ID || '',
+        clientSecret: process.env.GITHUB_SECRET || '',
+      }),
+      GoogleProvider({
+        clientId: process.env.GOOGLE_CLIENT_ID || '',
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+      }),
       Credentials({
         id: 'credentials',
         name: 'Credentials',
@@ -16,7 +29,7 @@ export default NextAuth({
           },
           password: {
             label: 'Password',
-            type: 'passord'
+            type: 'password'
           }
         },
         async authorize(credentials) {
@@ -50,6 +63,7 @@ export default NextAuth({
       signIn: '/auth' // login page
     },
     debug: process.env.NODE_ENV === 'development',
+    adapter: PrismaAdapter(prismadb),
     // connection config setting
     session: { strategy: 'jwt' },
     jwt: {
