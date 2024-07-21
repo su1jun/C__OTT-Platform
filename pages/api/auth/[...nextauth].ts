@@ -9,7 +9,7 @@ import prismadb from '@/libs/prismadb';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 
 // vaild account 
-export default NextAuth({
+export const authOptions: AuthOptions = {
     providers: [
       GithubProvider({
         clientId: process.env.GITHUB_ID || '',
@@ -70,6 +70,6 @@ export default NextAuth({
         secret: process.env.NEXTAUTH_JWT_SECRET,
       },
     secret: process.env.NEXTAUTH_SECRET
-  })
+  };
   
-  
+export default NextAuth(authOptions);
