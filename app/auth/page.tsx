@@ -3,16 +3,14 @@
 import axios from 'axios';
 import { useCallback, useState } from 'react';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 import Input from '@/components/input';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
 
 const Auth = () => {
-  // manage hook
-  const router = useRouter();
-  
+  // manage hook  
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
@@ -26,14 +24,16 @@ const Auth = () => {
 
   const login = useCallback(async () => {
     try {
-      await signIn('credentials', {
+      const result = await signIn('credentials', {
         email,
         password,
         redirect: false,
         callbackUrl: '/'
       });
 
-      router.push('/');
+      if (result?.ok) {
+        window.location.href = '/';
+      }
     } catch (error) {
       console.log(error);
     }
@@ -46,6 +46,8 @@ const Auth = () => {
         name,
         password
       });
+
+      await login();
     } catch (error) {
         console.log(error);
     }
@@ -69,7 +71,7 @@ const Auth = () => {
                   type="text"
                   label="Username"
                   value={name}
-                  onChange={(e: any) => setName(e.target.value)} 
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)} 
                 />
               )}
               <Input
