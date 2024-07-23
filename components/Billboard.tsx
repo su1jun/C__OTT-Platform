@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 
-// import PlayButton from '@/components/PlayButton';
+import PlayButton from '@/components/PlayButton';
 import useBillboard from '@/hooks/useBillboard';
 // import useInfoModalStore from '@/hooks/useInfoModalStore';
 
@@ -24,7 +24,7 @@ const Billboard: React.FC = () => {
           {data?.description}
         </p>
         <div className="flex flex-row items-center mt-3 md:mt-4 gap-3">
-          {/* <PlayButton movieId={data?.id} /> */}
+          <PlayButton movieId={data?.id} />
           <button
             // onClick={handleOpenModal}
             className="
